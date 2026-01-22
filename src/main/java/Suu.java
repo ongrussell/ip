@@ -19,58 +19,54 @@ public class Suu {
             input = sc.nextLine().trim();
 
             try {
-                if (input.equals("bye")) {
-                    System.out.println(LINE);
-                    System.out.println("Bye. Hope to see you again soon!");
-                    System.out.println(LINE);
-                    break;
+                CommandType command = CommandType.from(input);
+
+                switch (command) {
+                    case BYE:
+                        System.out.println(LINE);
+                        System.out.println("Bye. Hope to see you again soon!");
+                        System.out.println(LINE);
+                        sc.close();
+                        return;
+
+                    case LIST:
+                        printList();
+                        break;
+
+                    case MARK:
+                        markTask(input);
+                        break;
+
+                    case UNMARK:
+                        unmarkTask(input);
+                        break;
+
+                    case TODO:
+                        addTodo(input);
+                        break;
+
+                    case DEADLINE:
+                        addDeadline(input);
+                        break;
+
+                    case EVENT:
+                        addEvent(input);
+                        break;
+
+                    case DELETE:
+                        deleteTask(input);
+                        break;
+
+                    default:
+                        throw new SuuException("I don't know what that means? :o");
                 }
 
-                if (input.equals("list")) {
-                    printList();
-                    continue;
-                }
-
-                if (input.startsWith("mark ")) {
-                    markTask(input);
-                    continue;
-                }
-
-                if (input.startsWith("unmark ")) {
-                    unmarkTask(input);
-                    continue;
-                }
-
-                if (input.startsWith("todo")) {
-                    addTodo(input);
-                    continue;
-                }
-
-                if (input.startsWith("deadline")) {
-                    addDeadline(input);
-                    continue;
-                }
-
-                if (input.startsWith("event")) {
-                    addEvent(input);
-                    continue;
-                }
-
-                if (input.startsWith("delete ")) {
-                    deleteTask(input);
-                    continue;
-                }
-
-                // unknown command
-                throw new SuuException("I don't know what that means 😅");
             } catch (SuuException e) {
                 System.out.println(LINE);
                 System.out.println("Oops! " + e.getMessage());
                 System.out.println(LINE);
             }
         }
-
-        sc.close();
 
     }
 

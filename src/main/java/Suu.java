@@ -1,10 +1,13 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Suu {
     public static final String LINE = "_________________________________________";
+    public static ArrayList<String> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         String name = "Suu";
+
         String input = "";
 
         Scanner sc = new Scanner(System.in);
@@ -24,8 +27,18 @@ public class Suu {
                 break;
             }
 
+            if(input.equals("list")){
+                System.out.println(LINE);
+                for(int i = 0; i < tasks.size(); i++) {
+                    System.out.println((i + 1) + ". " + tasks.get(i));
+                }
+                System.out.println(LINE);
+                continue;
+            }
+            tasks.add(input);
+
             System.out.println(LINE);
-            System.out.println(input);
+            System.out.println("added: " + input);
             System.out.println(LINE);
         }
 

@@ -1,7 +1,9 @@
-todo
-deadline /by Sunday
-event meeting /from Mon
-mark abc
-mark 10
-blah
+todo read book
+todo return book
+deadline homework /by tonight
+list
+delete 2
+list
+delete 99
+delete abc
 bye

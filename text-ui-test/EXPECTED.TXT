@@ -4,34 +4,40 @@ What can I do  for you?
 _________________________________________
 _________________________________________
 Got it. I've added this task:
- [T][ ] borrow book
-Now you have 1 tasks in your list.
+  [T][ ] read book
+Now you have 1 tasks in the list.
+_________________________________________
+_________________________________________
+Got it. I've added this task:
+  [T][ ] return book
+Now you have 2 tasks in the list.
+_________________________________________
+_________________________________________
+Got it. I've added this task:
+  [D][ ] homework (by: tonight)
+Now you have 3 tasks in the list.
 _________________________________________
 _________________________________________
 Here are the tasks in your list:
-1. [T][ ] borrow book
+1. [T][ ] read book
+2. [T][ ] return book
+3. [D][ ] homework (by: tonight)
 _________________________________________
 _________________________________________
-Got it. I've added this task:
- [D][ ] return book (by: Sunday)
-Now you have 2 tasks in your list.
-_________________________________________
-_________________________________________
-Got it. I've added this task:
- [E][ ] 4pm (from: project meeting to: Mon 2pm)
-Now you have 3 tasks in your list.
-_________________________________________
-_________________________________________
-Got it. I've added this task:
- [D][ ] do homework (by: no idea :-p)
-Now you have 4 tasks in your list.
+Noted. I've removed this task:
+  [T][ ] return book
+Now you have 2 tasks in the list.
 _________________________________________
 _________________________________________
 Here are the tasks in your list:
-1. [T][ ] borrow book
-2. [D][ ] return book (by: Sunday)
-3. [E][ ] 4pm (from: project meeting to: Mon 2pm)
-4. [D][ ] do homework (by: no idea :-p)
+1. [T][ ] read book
+2. [D][ ] homework (by: tonight)
+_________________________________________
+_________________________________________
+Oops! That task number does not exist.
+_________________________________________
+_________________________________________
+Oops! Task number must be a number. Example: delete 2
 _________________________________________
 _________________________________________
 Bye. Hope to see you again soon!

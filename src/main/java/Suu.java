@@ -56,6 +56,11 @@ public class Suu {
                     continue;
                 }
 
+                if (input.startsWith("delete ")) {
+                    deleteTask(input);
+                    continue;
+                }
+
                 // unknown command
                 throw new SuuException("I don't know what that means 😅");
             } catch (SuuException e) {
@@ -196,6 +201,18 @@ public class Suu {
         System.out.println(LINE);
         System.out.println("Got it. I've added this task:");
         System.out.println("  " + t);
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        System.out.println(LINE);
+    }
+
+    public static void deleteTask(String input) throws SuuException {
+        int index = parseTaskNumber(input, "delete");
+
+        Task removed = tasks.remove(index);
+
+        System.out.println(LINE);
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("  " + removed);
         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
         System.out.println(LINE);
     }

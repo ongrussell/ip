@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 
@@ -65,28 +66,30 @@ public class Storage {
             return "T | " + done + " | " + task.getDescription();
         } else if (task instanceof Deadline) {
             Deadline d = (Deadline) task;
-            return "D | " + done + " | " + task.getDescription() + " | " + d.getByForStorage();
+            return "D | " + done + " | " + task.getDescription() + " | " + d.getBy().toString();
         } else if (task instanceof Event) {
             Event e = (Event) task;
             return "E | " + done + " | " + task.getDescription()
-                    + " | " + e.getStartDate() + " | " + e.getEndDate();
+                    + " | " + e.getFrom().toString()
+                    + " | " + e.getTo().toString();
         }
 
         throw new SuuException("Unknown task type, cannot save.");
     }
-
-    private Task parseLine(String line) {
-        if (line == null) return null;
-
+    private Task parseLine(String line) throws SuuException {
         String trimmed = line.trim();
-        if (trimmed.isEmpty()) return null;
+        if (trimmed.isEmpty()) {
+            throw new SuuException("Save file has an empty line.");
+        }
 
         String[] parts = trimmed.split("\\s*\\|\\s*");
-        if (parts.length < 3) return null;
+        if (parts.length < 3) {
+            throw new SuuException("Save file is corrupted: " + line);
+        }
 
-        String type = parts[0].trim();
-        String doneStr = parts[1].trim();
-        String desc = parts[2].trim();
+        String type = parts[0];
+        boolean isDone = parts[1].equals("1");
+        String desc = parts[2];
 
         Task task;
         switch (type) {
@@ -94,25 +97,18 @@ public class Storage {
                 task = new Todo(desc);
                 break;
             case "D":
-                if (parts.length < 4) return null;
-                try {
-                    LocalDate by = LocalDate.parse(parts[3].trim());
-                    task = new Deadline(desc, by);
-                } catch (DateTimeParseException e) {
-                    return null;
-                }
+                if (parts.length != 4) throw new SuuException("Save file is corrupted: " + line);
+                task = new Deadline(desc, LocalDate.parse(parts[3]));
                 break;
             case "E":
-                if (parts.length < 5) return null;
-                task = new Event(desc, parts[3].trim(), parts[4].trim());
+                if (parts.length != 5) throw new SuuException("Save file is corrupted: " + line);
+                task = new Event(desc, LocalDateTime.parse(parts[3]), LocalDateTime.parse(parts[4]));
                 break;
             default:
-                return null;
+                throw new SuuException("Save file has unknown task type: " + type);
         }
 
-        if ("1".equals(doneStr)) {
-            task.setMarked();
-        }
+        if (isDone) task.setMarked();
         return task;
     }
 }

@@ -1,3 +1,4 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.time.LocalDate;
@@ -184,33 +185,40 @@ public class Suu {
     }
 
     public static void addDeadline(String input) throws SuuException {
+        String parts = input.replaceFirst("deadline", "").trim();
 
-        String rest = input.replaceFirst("deadline", "").trim();
+        String[] split = parts.split("/by", 2);
+        if (split.length < 2) {
+            throw new SuuException("Use: deadline <task> /by yyyy-MM-dd (e.g., 2019-10-15)");
+        }
 
-        if (rest.isEmpty()) {
+        String desc = split[0].trim();
+        String byText = split[1].trim();
+
+        if (desc.isEmpty()) {
             throw new SuuException("The description of a deadline cannot be empty.");
         }
-
-        String[] parts = rest.split(" /by ", 2);
-        if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
-            throw new SuuException("Use this format: deadline <task> /by <yyyy-mm-dd>");
+        if (byText.isEmpty()) {
+            throw new SuuException("The /by date cannot be empty.");
         }
 
-        String desc = parts[0].trim();
-        String byStr = parts[1].trim();
-
-        LocalDate byDate;
+        LocalDate by;
         try {
-            byDate = LocalDate.parse(byStr);
-        } catch (DateTimeParseException e) {
-            throw new SuuException("Please use date format yyyy-mm-dd (e.g., 2019-10-15).");
+            by = DateTimeUtil.parseDate(byText);
+        } catch (Exception e) {
+            throw new SuuException("Invalid date. Use yyyy-MM-dd (e.g., 2019-10-15)");
         }
 
-        Task t = new Deadline(desc, byDate);
+        Task t = new Deadline(desc, by);
         tasks.add(t);
 
-
-        storage.save(tasks);
+        // your Level-7 autosave
+        try {
+            storage.save(tasks);
+        } catch (SuuException e) {
+            tasks.remove(tasks.size() - 1);
+            throw e;
+        }
 
         System.out.println(LINE);
         System.out.println("Got it. I've added this task:");
@@ -222,38 +230,41 @@ public class Suu {
     public static void addEvent(String input) throws SuuException {
         String parts = input.replaceFirst("event", "").trim();
 
-        if (!parts.contains("/from") || !parts.contains("/to")) {
-            throw new SuuException("Invalid event format. Use: event <desc> /from <start> /to <end>");
+        String[] splitDesc = parts.split("/from", 2);
+        if (splitDesc.length < 2) {
+            throw new SuuException("Use: event <task> /from yyyy-MM-dd HHmm /to yyyy-MM-dd HHmm");
         }
 
-
-        String[] splitDesc = parts.split("/from", 2);
         String desc = splitDesc[0].trim();
-
         if (desc.isEmpty()) {
             throw new SuuException("The description of an event cannot be empty.");
         }
 
-        String fromTo = splitDesc[1].trim();
-        String[] splitFromTo = fromTo.split("/to", 2);
-
+        String[] splitFromTo = splitDesc[1].split("/to", 2);
         if (splitFromTo.length < 2) {
-            throw new SuuException("Invalid event format. Use: event <desc> /from <start> /to <end>");
+            throw new SuuException("Use: event <task> /from yyyy-MM-dd HHmm /to yyyy-MM-dd HHmm");
         }
 
-        String from = splitFromTo[0].trim();
-        String to = splitFromTo[1].trim();
+        String fromText = splitFromTo[0].trim();
+        String toText = splitFromTo[1].trim();
 
-        if (from.isEmpty()) {
-            throw new SuuException("The /from time of an event cannot be empty.");
+        if (fromText.isEmpty() || toText.isEmpty()) {
+            throw new SuuException("Both /from and /to must be provided.");
         }
-        if (to.isEmpty()) {
-            throw new SuuException("The /to time of an event cannot be empty.");
+
+        LocalDateTime from;
+        LocalDateTime to;
+        try {
+            from = DateTimeUtil.parseDateTime(fromText);
+            to = DateTimeUtil.parseDateTime(toText);
+        } catch (Exception e) {
+            throw new SuuException("Invalid date/time. Use yyyy-MM-dd HHmm (e.g., 2019-12-02 1800)");
         }
 
         Task t = new Event(desc, from, to);
         tasks.add(t);
 
+        // your Level-7 autosave
         try {
             storage.save(tasks);
         } catch (SuuException e) {

@@ -1,23 +1,27 @@
-public class Event extends Task{
-    private String startDate;
-    private String endDate;
+import java.time.LocalDateTime;
 
-    public Event(String description, String startDate, String endDate) {
+public class Event extends Task {
+    private LocalDateTime from;
+    private LocalDateTime to;
+
+    public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.from = from;
+        this.to = to;
     }
 
-    public String getStartDate() {
-        return startDate;
+    public LocalDateTime getFrom() {
+        return from;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public LocalDateTime getTo() {
+        return to;
     }
 
     @Override
-    public String toString(){
-        return "[E]" + super.toString() + " (from: " + startDate + " to: " + endDate + ")";
+    public String toString() {
+        return "[E]" + super.toString()
+                + " (from: " + DateTimeUtil.formatDateTime(from)
+                + " to: " + DateTimeUtil.formatDateTime(to) + ")";
     }
 }

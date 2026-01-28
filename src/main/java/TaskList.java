@@ -16,6 +16,10 @@ public class TaskList {
         tasks.add(t);
     }
 
+    public void add(int index, Task t) {
+        tasks.add(index, t);
+    }
+
     public Task remove(int index) {
         return tasks.remove(index);
     }

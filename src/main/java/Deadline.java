@@ -1,7 +1,7 @@
 import java.time.LocalDate;
 
 public class Deadline extends Task {
-    private LocalDate by;
+    private final LocalDate by;
 
     public Deadline(String description, LocalDate by) {
         super(description);

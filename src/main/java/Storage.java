@@ -1,5 +1,7 @@
 import java.io.*;
 import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 
 public class Storage {
@@ -63,7 +65,7 @@ public class Storage {
             return "T | " + done + " | " + task.getDescription();
         } else if (task instanceof Deadline) {
             Deadline d = (Deadline) task;
-            return "D | " + done + " | " + task.getDescription() + " | " + d.getDeadline();
+            return "D | " + done + " | " + task.getDescription() + " | " + d.getByForStorage();
         } else if (task instanceof Event) {
             Event e = (Event) task;
             return "E | " + done + " | " + task.getDescription()
@@ -93,7 +95,12 @@ public class Storage {
                 break;
             case "D":
                 if (parts.length < 4) return null;
-                task = new Deadline(desc, parts[3].trim());
+                try {
+                    LocalDate by = LocalDate.parse(parts[3].trim());
+                    task = new Deadline(desc, by);
+                } catch (DateTimeParseException e) {
+                    return null;
+                }
                 break;
             case "E":
                 if (parts.length < 5) return null;

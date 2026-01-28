@@ -1,8 +1,5 @@
 todo read book
-deadline return book /by Sunday
-event meeting /from Mon /to Tue
 list
 mark 1
-delete 2
 blah
 bye

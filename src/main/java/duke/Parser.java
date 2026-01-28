@@ -1,3 +1,5 @@
+package duke;
+
 public class Parser {
 
     public static CommandType parseCommandType(String input) {
@@ -14,7 +16,7 @@ public class Parser {
         try {
             taskNum = Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
-            throw new SuuException("Task number must be a number. Example: " + commandWord + " 2");
+            throw new SuuException("duke.Task number must be a number. Example: " + commandWord + " 2");
         }
 
         int index = taskNum - 1;

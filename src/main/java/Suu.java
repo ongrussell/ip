@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class Suu {
     public static final String LINE = "_________________________________________";
@@ -19,7 +21,7 @@ public class Suu {
         try {
             tasks = storage.load();
         } catch (SuuException e) {
-            // fail-safe: start empty but let user continue
+
             tasks = new ArrayList<>();
             System.out.println(LINE);
             System.out.println("Oops! " + e.getMessage());
@@ -182,32 +184,33 @@ public class Suu {
     }
 
     public static void addDeadline(String input) throws SuuException {
-        String parts = input.replaceFirst("deadline", "").trim();
 
-        if (!parts.contains("/by")) {
-            throw new SuuException("Invalid deadline format. Use: deadline <desc> /by <time>");
-        }
+        String rest = input.replaceFirst("deadline", "").trim();
 
-        String[] splitParts = parts.split("/by", 2);
-        String desc = splitParts[0].trim();
-        String by = splitParts[1].trim();
-
-        if (desc.isEmpty()) {
+        if (rest.isEmpty()) {
             throw new SuuException("The description of a deadline cannot be empty.");
         }
-        if (by.isEmpty()) {
-            throw new SuuException("The /by time of a deadline cannot be empty.");
+
+        String[] parts = rest.split(" /by ", 2);
+        if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
+            throw new SuuException("Use this format: deadline <task> /by <yyyy-mm-dd>");
         }
 
-        Task t = new Deadline(desc, by);
+        String desc = parts[0].trim();
+        String byStr = parts[1].trim();
+
+        LocalDate byDate;
+        try {
+            byDate = LocalDate.parse(byStr);
+        } catch (DateTimeParseException e) {
+            throw new SuuException("Please use date format yyyy-mm-dd (e.g., 2019-10-15).");
+        }
+
+        Task t = new Deadline(desc, byDate);
         tasks.add(t);
 
-        try {
-            storage.save(tasks);
-        } catch (SuuException e) {
-            tasks.remove(tasks.size() - 1); // rollback
-            throw e;
-        }
+
+        storage.save(tasks);
 
         System.out.println(LINE);
         System.out.println("Got it. I've added this task:");
@@ -223,7 +226,7 @@ public class Suu {
             throw new SuuException("Invalid event format. Use: event <desc> /from <start> /to <end>");
         }
 
-        // desc | from.../to...
+
         String[] splitDesc = parts.split("/from", 2);
         String desc = splitDesc[0].trim();
 
@@ -231,7 +234,7 @@ public class Suu {
             throw new SuuException("The description of an event cannot be empty.");
         }
 
-        String fromTo = splitDesc[1].trim(); // "<start> /to <end>"
+        String fromTo = splitDesc[1].trim();
         String[] splitFromTo = fromTo.split("/to", 2);
 
         if (splitFromTo.length < 2) {
@@ -254,7 +257,7 @@ public class Suu {
         try {
             storage.save(tasks);
         } catch (SuuException e) {
-            tasks.remove(tasks.size() - 1); // rollback
+            tasks.remove(tasks.size() - 1);
             throw e;
         }
 

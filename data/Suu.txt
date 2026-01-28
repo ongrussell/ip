@@ -1,3 +1,2 @@
-T | 1 | read book
-E | 0 | meeting | Mon 2pm | Mon 4pm
-D | 0 | return book | 2019-10-15
+D | 1 | return book | 2019-10-15
+E | 0 | project meeting | 2019-12-02T14:00 | 2019-12-02T16:00

@@ -1,8 +1,10 @@
+package duke;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Suu {
-    private static final String NAME = "Suu";
+    private static final String NAME = "duke.Suu";
 
     private final Ui ui;
     private final Storage storage;
@@ -10,7 +12,7 @@ public class Suu {
 
     public Suu() {
         this.ui = new Ui();
-        this.storage = new Storage("data", "Suu.txt");
+        this.storage = new Storage("data", "duke.Suu.txt");
 
         TaskList loaded;
         try {

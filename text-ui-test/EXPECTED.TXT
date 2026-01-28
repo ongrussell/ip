@@ -1,5 +1,5 @@
 _________________________________________
-Hello! I'm Suu
+Hello! I'm duke.Suu
 What can I do  for you?
 _________________________________________
 _________________________________________
@@ -37,7 +37,7 @@ _________________________________________
 Oops! That task number does not exist.
 _________________________________________
 _________________________________________
-Oops! Task number must be a number. Example: delete 2
+Oops! duke.Task number must be a number. Example: delete 2
 _________________________________________
 _________________________________________
 Bye. Hope to see you again soon!

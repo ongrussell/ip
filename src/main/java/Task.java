@@ -15,6 +15,14 @@ public class Task {
         isMarked = false;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public boolean isMarked() {
+        return isMarked;
+    }
+
     @Override
     public String toString() {
         String status = isMarked ? "X" : " ";

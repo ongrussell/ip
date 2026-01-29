@@ -3,6 +3,13 @@ package duke;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Main class of the Suu chatbot.
+ * Handles reading user commands and executing the corresponding task operations.
+ *
+ * <p>This class wires together {@link Ui}, {@link Parser}, {@link Storage}, and {@link TaskList},
+ * and runs the main command-processing loop.</p>
+ */
 public class Suu {
     private static final String NAME = "duke.Suu";
 
@@ -10,6 +17,11 @@ public class Suu {
     private final Storage storage;
     private final TaskList tasks;
 
+    /**
+     * Constructs a Suu instance and attempts to load any previously saved tasks.
+     *
+     * <p>If loading fails, an empty {@link TaskList} is used and the error message is shown to the user.</p>
+     */
     public Suu() {
         this.ui = new Ui();
         this.storage = new Storage("data", "duke.Suu.txt");
@@ -24,6 +36,12 @@ public class Suu {
         this.tasks = loaded;
     }
 
+    /**
+     * Runs the chatbot loop until the user exits.
+     *
+     * <p>This method continuously reads user input, parses it into a {@link CommandType},
+     * executes the requested operation, and displays the result via {@link Ui}.</p>
+     */
     public void run() {
         ui.showWelcome(NAME);
 
@@ -77,6 +95,12 @@ public class Suu {
         }
     }
 
+    /**
+     * Marks the task specified by the user input as done and saves the updated task list.
+     *
+     * @param input Full user input (e.g. {@code "mark 2"}).
+     * @throws SuuException If the task index is invalid or saving fails.
+     */
     private void markTask(String input) throws SuuException {
         int index = Parser.parseTaskIndex(input, tasks.size(), "mark");
         Task t = tasks.get(index);
@@ -96,6 +120,12 @@ public class Suu {
         ui.showMark(t);
     }
 
+    /**
+     * Unmarks the task specified by the user input (sets it as not done) and saves the updated task list.
+     *
+     * @param input Full user input (e.g. {@code "unmark 2"}).
+     * @throws SuuException If the task index is invalid or saving fails.
+     */
     private void unmarkTask(String input) throws SuuException {
         int index = Parser.parseTaskIndex(input, tasks.size(), "unmark");
         Task t = tasks.get(index);
@@ -115,6 +145,12 @@ public class Suu {
         ui.showUnmark(t);
     }
 
+    /**
+     * Adds a new {@link Todo} task using the user input and saves the updated task list.
+     *
+     * @param input Full user input (e.g. {@code "todo read book"}).
+     * @throws SuuException If the todo description is missing/invalid or saving fails.
+     */
     private void addTodo(String input) throws SuuException {
         String desc = Parser.parseTodoDescription(input);
 
@@ -131,6 +167,14 @@ public class Suu {
         ui.showAdd(t, tasks.size());
     }
 
+    /**
+     * Adds a new {@link Deadline} task using the user input and saves the updated task list.
+     *
+     * <p>Expected input format: {@code deadline <desc> /by <yyyy-MM-dd>}</p>
+     *
+     * @param input Full user input.
+     * @throws SuuException If the format/date is invalid or saving fails.
+     */
     private void addDeadline(String input) throws SuuException {
         String[] parts = Parser.parseDeadline(input); // [desc, byText]
 
@@ -154,6 +198,14 @@ public class Suu {
         ui.showAdd(t, tasks.size());
     }
 
+    /**
+     * Adds a new {@link Event} task using the user input and saves the updated task list.
+     *
+     * <p>Expected input format: {@code event <desc> /from <yyyy-MM-dd HHmm> /to <yyyy-MM-dd HHmm>}</p>
+     *
+     * @param input Full user input.
+     * @throws SuuException If the format/date-time is invalid or saving fails.
+     */
     private void addEvent(String input) throws SuuException {
         String[] parts = Parser.parseEvent(input); // [desc, fromText, toText]
 
@@ -179,6 +231,14 @@ public class Suu {
         ui.showAdd(t, tasks.size());
     }
 
+    /**
+     * Deletes the task specified by the user input and saves the updated task list.
+     *
+     * <p>If saving fails, the deletion is rolled back by inserting the task back into the list.</p>
+     *
+     * @param input Full user input (e.g. {@code "delete 2"}).
+     * @throws SuuException If the task index is invalid or saving fails.
+     */
     private void deleteTask(String input) throws SuuException {
         int index = Parser.parseTaskIndex(input, tasks.size(), "delete");
 
@@ -194,6 +254,11 @@ public class Suu {
         ui.showDelete(removed, tasks.size());
     }
 
+    /**
+     * Application entry point. Starts the chatbot and processes user commands until exit.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         new Suu().run();
     }

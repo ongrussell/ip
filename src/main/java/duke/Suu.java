@@ -34,41 +34,41 @@ public class Suu {
                 CommandType command = Parser.parseCommandType(input);
 
                 switch (command) {
-                    case BYE:
-                        ui.showBye();
-                        ui.close();
-                        return;
+                case BYE:
+                    ui.showBye();
+                    ui.close();
+                    return;
 
-                    case LIST:
-                        ui.showList(tasks);
-                        break;
+                case LIST:
+                    ui.showList(tasks);
+                    break;
 
-                    case MARK:
-                        markTask(input);
-                        break;
+                case MARK:
+                    markTask(input);
+                    break;
 
-                    case UNMARK:
-                        unmarkTask(input);
-                        break;
+                case UNMARK:
+                    unmarkTask(input);
+                    break;
 
-                    case TODO:
-                        addTodo(input);
-                        break;
+                case TODO:
+                    addTodo(input);
+                    break;
 
-                    case DEADLINE:
-                        addDeadline(input);
-                        break;
+                case DEADLINE:
+                    addDeadline(input);
+                    break;
 
-                    case EVENT:
-                        addEvent(input);
-                        break;
+                case EVENT:
+                    addEvent(input);
+                    break;
 
-                    case DELETE:
-                        deleteTask(input);
-                        break;
+                case DELETE:
+                    deleteTask(input);
+                    break;
 
-                    default:
-                        throw new SuuException("I don't know what that means? :o");
+                default:
+                    throw new SuuException("I don't know what that means? :o");
                 }
 
             } catch (SuuException e) {

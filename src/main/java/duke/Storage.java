@@ -1,9 +1,15 @@
 package duke;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Storage {
@@ -77,6 +83,7 @@ public class Storage {
 
         throw new SuuException("Unknown task type, cannot save.");
     }
+
     private Task parseLine(String line) throws SuuException {
         String trimmed = line.trim();
         if (trimmed.isEmpty()) {
@@ -94,19 +101,19 @@ public class Storage {
 
         Task task;
         switch (type) {
-            case "T":
-                task = new Todo(desc);
-                break;
-            case "D":
-                if (parts.length != 4) throw new SuuException("Save file is corrupted: " + line);
-                task = new Deadline(desc, LocalDate.parse(parts[3]));
-                break;
-            case "E":
-                if (parts.length != 5) throw new SuuException("Save file is corrupted: " + line);
-                task = new Event(desc, LocalDateTime.parse(parts[3]), LocalDateTime.parse(parts[4]));
-                break;
-            default:
-                throw new SuuException("Save file has unknown task type: " + type);
+        case "T":
+            task = new Todo(desc);
+            break;
+        case "D":
+            if (parts.length != 4) throw new SuuException("Save file is corrupted: " + line);
+            task = new Deadline(desc, LocalDate.parse(parts[3]));
+            break;
+        case "E":
+            if (parts.length != 5) throw new SuuException("Save file is corrupted: " + line);
+            task = new Event(desc, LocalDateTime.parse(parts[3]), LocalDateTime.parse(parts[4]));
+            break;
+        default:
+            throw new SuuException("Save file has unknown task type: " + type);
         }
 
         if (isDone) task.setMarked();

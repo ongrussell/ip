@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * and runs the main command-processing loop.</p>
  */
 public class Suu {
-    private static final String NAME = "duke.Suu";
+    private static final String NAME = "Suu";
 
     private final Ui ui;
     private final Storage storage;
@@ -24,7 +24,7 @@ public class Suu {
      */
     public Suu() {
         this.ui = new Ui();
-        this.storage = new Storage("data", "duke.Suu.txt");
+        this.storage = new Storage("data", "Suu.txt");
 
         TaskList loaded;
         try {
@@ -84,6 +84,9 @@ public class Suu {
                 case DELETE:
                     deleteTask(input);
                     break;
+                    case FIND:
+                        findTasks(input);
+                        break;
 
                 default:
                     throw new SuuException("I don't know what that means? :o");
@@ -118,6 +121,12 @@ public class Suu {
         }
 
         ui.showMark(t);
+    }
+
+    private void findTasks(String input) throws SuuException {
+        String keyword = Parser.parseFindKeyword(input);
+        java.util.ArrayList<Task> matches = tasks.find(keyword);
+        ui.showFindResults(keyword, matches);
     }
 
     /**

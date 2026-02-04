@@ -114,6 +114,13 @@ public class Parser {
         return new String[]{desc, secondSplit[0].trim(), secondSplit[1].trim()};
     }
 
+    /**
+     * Extracts the keyword for a {@code find} command.
+     *
+     * @param input Full user input line (e.g. {@code "find book"}).
+     * @return Keyword to search for.
+     * @throws SuuException If the keyword is missing/empty.
+     */
     public static String parseFindKeyword(String input) throws SuuException {
         String[] parts = input.trim().split("\\s+", 2);
         if (parts.length < 2 || parts[1].trim().isEmpty()) {

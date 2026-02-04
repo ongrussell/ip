@@ -1,13 +1,14 @@
 package duke;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class DateTimeUtilTest {
 
@@ -18,7 +19,7 @@ public class DateTimeUtilTest {
     }
 
     @Test
-    public void parseDateTime_andFormat_valid_returnsExpectedString() {
+    public void parseDateTime_valid_returnsExpected() {
         Locale old = Locale.getDefault();
         try {
             Locale.setDefault(Locale.ENGLISH);
@@ -35,7 +36,7 @@ public class DateTimeUtilTest {
 
     @Test
     public void parseDateTime_invalid_throws() {
-        assertThrows(DateTimeParseException.class,
-                () -> DateTimeUtil.parseDateTime("2019/12/02 1800"));
+        assertThrows(DateTimeParseException.class, () ->
+                DateTimeUtil.parseDateTime("2019/12/02 1800"));
     }
 }

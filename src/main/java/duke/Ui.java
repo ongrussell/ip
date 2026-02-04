@@ -1,5 +1,6 @@
 package duke;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -121,7 +122,13 @@ public class Ui {
         System.out.println(LINE);
     }
 
-    public void showFindResults(String keyword, java.util.ArrayList<Task> matches) {
+    /**
+     * Displays tasks that match the given keyword.
+     *
+     * @param keyword Keyword used for searching.
+     * @param matches List of matching tasks (may be empty).
+     */
+    public void showFindResults(String keyword, ArrayList<Task> matches) {
         System.out.println(LINE);
 
         if (matches.isEmpty()) {

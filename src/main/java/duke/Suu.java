@@ -84,9 +84,9 @@ public class Suu {
                 case DELETE:
                     deleteTask(input);
                     break;
-                    case FIND:
-                        findTasks(input);
-                        break;
+                case FIND:
+                    findTasks(input);
+                    break;
 
                 default:
                     throw new SuuException("I don't know what that means? :o");

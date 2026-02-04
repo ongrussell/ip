@@ -1,8 +1,10 @@
 package duke;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class ParserTest {
 
@@ -14,22 +16,22 @@ public class ParserTest {
 
     @Test
     public void parseTaskIndex_missingNumber_throwsException() {
-        SuuException e = assertThrows(SuuException.class,
-                () -> Parser.parseTaskIndex("mark", 5, "mark"));
+        SuuException e = assertThrows(SuuException.class, () ->
+                Parser.parseTaskIndex("mark", 5, "mark"));
         assertTrue(e.getMessage().toLowerCase().contains("task number"));
     }
 
     @Test
     public void parseTaskIndex_nonNumeric_throwsException() {
-        SuuException e = assertThrows(SuuException.class,
-                () -> Parser.parseTaskIndex("mark two", 5, "mark"));
+        SuuException e = assertThrows(SuuException.class, () ->
+                Parser.parseTaskIndex("mark two", 5, "mark"));
         assertTrue(e.getMessage().toLowerCase().contains("number"));
     }
 
     @Test
     public void parseTaskIndex_outOfRange_throwsException() {
-        SuuException e = assertThrows(SuuException.class,
-                () -> Parser.parseTaskIndex("mark 10", 5, "mark"));
+        SuuException e = assertThrows(SuuException.class, () ->
+                Parser.parseTaskIndex("mark 10", 5, "mark"));
         assertTrue(e.getMessage().toLowerCase().contains("does not exist"));
     }
 }

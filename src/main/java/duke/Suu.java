@@ -110,6 +110,9 @@ public class Suu {
             case FIND:
                 return formatFind(input);
 
+            case STATS:
+                return formatStats();
+
             default:
                 return "I don't know what that means? :o";
             }
@@ -317,6 +320,47 @@ public class Suu {
             rollback.run();
             throw e;
         }
+    }
+
+    /**
+     * Returns a summary of task statistics (counts by completion and by type).
+     *
+     * @return A user-friendly statistics summary.
+     */
+    private String formatStats() {
+        int total = tasks.size();
+        if (total == 0) {
+            return "No tasks yet. Add some tasks first!";
+        }
+
+        int done = 0;
+        int todo = 0;
+        int deadline = 0;
+        int event = 0;
+
+        for (Task t : tasks.asList()) {
+            if (t.isMarked()) {
+                done++;
+            }
+            if (t instanceof Todo) {
+                todo++;
+            } else if (t instanceof Deadline) {
+                deadline++;
+            } else if (t instanceof Event) {
+                event++;
+            }
+        }
+
+        int notDone = total - done;
+
+        return "Here are your stats:\n"
+                + "Total tasks: " + total + "\n"
+                + "Done: " + done + "\n"
+                + "Not done: " + notDone + "\n\n"
+                + "By type:\n"
+                + "  Todo: " + todo + "\n"
+                + "  Deadline: " + deadline + "\n"
+                + "  Event: " + event;
     }
 }
 

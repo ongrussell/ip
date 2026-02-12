@@ -149,14 +149,11 @@ public class Suu {
         boolean wasMarked = t.isMarked();
         t.setMarked();
 
-        try {
-            storage.save(tasks.asList());
-        } catch (SuuException e) {
+        saveWithRollback(() -> {
             if (!wasMarked) {
                 t.unmark();
             }
-            throw e;
-        }
+        });
 
         return "Nice! I've marked this task as done:\n  " + t;
     }
@@ -175,14 +172,11 @@ public class Suu {
         boolean wasMarked = t.isMarked();
         t.unmark();
 
-        try {
-            storage.save(tasks.asList());
-        } catch (SuuException e) {
+        saveWithRollback(() -> {
             if (wasMarked) {
                 t.setMarked();
             }
-            throw e;
-        }
+        });
 
         return "OK! I've marked this task as not done yet:\n  " + t;
     }
@@ -198,14 +192,10 @@ public class Suu {
         String desc = Parser.parseTodoDescription(input);
 
         Task t = new Todo(desc);
+        int addedIndex = tasks.size();
         tasks.add(t);
 
-        try {
-            storage.save(tasks.asList());
-        } catch (SuuException e) {
-            tasks.remove(tasks.size() - 1);
-            throw e;
-        }
+        saveWithRollback(() -> tasks.remove(addedIndex));
 
         return "Got it. I've added this task:\n  " + t
                 + "\nNow you have " + tasks.size() + " tasks in the list.";
@@ -229,14 +219,10 @@ public class Suu {
         }
 
         Task t = new Deadline(parts[0], by);
+        int addedIndex = tasks.size();
         tasks.add(t);
 
-        try {
-            storage.save(tasks.asList());
-        } catch (SuuException e) {
-            tasks.remove(tasks.size() - 1);
-            throw e;
-        }
+        saveWithRollback(() -> tasks.remove(addedIndex));
 
         return "Got it. I've added this task:\n  " + t
                 + "\nNow you have " + tasks.size() + " tasks in the list.";
@@ -262,14 +248,10 @@ public class Suu {
         }
 
         Task t = new Event(parts[0], from, to);
+        int addedIndex = tasks.size();
         tasks.add(t);
 
-        try {
-            storage.save(tasks.asList());
-        } catch (SuuException e) {
-            tasks.remove(tasks.size() - 1);
-            throw e;
-        }
+        saveWithRollback(() -> tasks.remove(addedIndex));
 
         return "Got it. I've added this task:\n  " + t
                 + "\nNow you have " + tasks.size() + " tasks in the list.";
@@ -288,12 +270,7 @@ public class Suu {
         int index = Parser.parseTaskIndex(input, tasks.size(), "delete");
         Task removed = tasks.remove(index);
 
-        try {
-            storage.save(tasks.asList());
-        } catch (SuuException e) {
-            tasks.add(index, removed); // rollback
-            throw e;
-        }
+        saveWithRollback(() -> tasks.add(index, removed));
 
         return "Noted. I've removed this task:\n  " + removed
                 + "\nNow you have " + tasks.size() + " tasks in the list.";
@@ -319,6 +296,27 @@ public class Suu {
             sb.append(i + 1).append(". ").append(matches.get(i)).append("\n");
         }
         return sb.toString().trim();
+    }
+
+    /**
+     * Saves the current task list to storage, rolling back a prior in-memory change if saving fails.
+     *
+     * <p>This method is used to keep the in-memory {@link TaskList} and on-disk data consistent.
+     * Callers should first apply an in-memory mutation (e.g., add/remove/mark a task), then
+     * provide a rollback action that reverses that mutation. If {@link Storage#save(java.util.List)}
+     * throws a {@link SuuException}, the rollback action is executed and the exception is rethrown.</p>
+     *
+     * @param rollback A runnable that reverses the in-memory change made by the caller.
+     * @throws SuuException If saving to storage fails.
+     */
+    private void saveWithRollback(Runnable rollback) throws SuuException {
+        assert rollback != null : "Rollback action must not be null";
+        try {
+            storage.save(tasks.asList());
+        } catch (SuuException e) {
+            rollback.run();
+            throw e;
+        }
     }
 }
 

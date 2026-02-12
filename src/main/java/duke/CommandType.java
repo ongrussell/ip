@@ -54,7 +54,7 @@ public enum CommandType {
         }
 
         // first word determines command type
-        String firstWord = trimmed.split(" ")[0].toLowerCase();
+        String firstWord = trimmed.split("\\s+", 2)[0].toLowerCase();
 
         for (CommandType type : CommandType.values()) {
             if (type.word.equals(firstWord)) {

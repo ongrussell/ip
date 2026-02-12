@@ -47,10 +47,7 @@ public class Storage {
         try (BufferedReader br = new BufferedReader(new FileReader(dataFile))) {
             String line;
             while ((line = br.readLine()) != null) {
-                Task t = parseLine(line);
-                if (t != null) {
-                    loaded.add(t);
-                }
+                loaded.add(parseLine(line));
             }
         } catch (IOException e) {
             throw new SuuException("I had trouble reading the save file.");

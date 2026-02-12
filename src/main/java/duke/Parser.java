@@ -29,16 +29,16 @@ public class Parser {
      * @throws SuuException If the task number is missing, not a number, or out of range.
      */
     public static int parseTaskIndex(String input, int taskCount, String commandWord) throws SuuException {
-        String[] parts = input.split(" ");
-        if (parts.length < 2) {
+        String[] parts = input.trim().split("\\s+", 2);
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
             throw new SuuException("Please provide a task number. Example: " + commandWord + " 2");
         }
 
         int taskNum;
         try {
-            taskNum = Integer.parseInt(parts[1]);
+            taskNum = Integer.parseInt(parts[1].trim());
         } catch (NumberFormatException e) {
-            throw new SuuException("duke.Task number must be a number. Example: " + commandWord + " 2");
+            throw new SuuException("Task number must be a number. Example: " + commandWord + " 2");
         }
 
         int index = taskNum - 1;

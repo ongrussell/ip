@@ -69,6 +69,7 @@ public class Storage {
      */
     public void save(List<Task> tasks) throws SuuException {
 
+        assert tasks != null : "Tasks to save must not be null";
         File parent = dataFile.getParentFile();
         if (parent != null && !parent.exists()) {
             if (!parent.mkdirs()) {
@@ -101,6 +102,7 @@ public class Storage {
      * @throws SuuException If the task type is not recognized.
      */
     private String encodeTask(Task task) throws SuuException {
+        assert task != null : "Task to encode must not be null";
         String done = task.isMarked() ? "1" : "0";
 
         if (task instanceof Todo) {

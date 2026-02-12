@@ -14,6 +14,7 @@ public enum CommandType {
     EVENT("event"),
     DELETE("delete"),
     FIND("find"),
+    STATS("stats"),
     UNKNOWN("");
 
     private final String word;

@@ -37,6 +37,7 @@ public class DateTimeUtil {
      * @return Parsed {@link LocalDate}.
      */
     public static LocalDate parseDate(String s) {
+        assert s != null : "Date string must not be null";
         return LocalDate.parse(s.trim(), INPUT_DATE);
     }
 
@@ -47,6 +48,7 @@ public class DateTimeUtil {
      * @return Parsed {@link LocalDateTime}.
      */
     public static LocalDateTime parseDateTime(String s) {
+        assert s != null : "Date-time string must not be null";
         return LocalDateTime.parse(s.trim(), INPUT_DATE_TIME);
     }
 
@@ -57,6 +59,7 @@ public class DateTimeUtil {
      * @return Formatted date string.
      */
     public static String formatDate(LocalDate d) {
+        assert d != null : "Date must not be null";
         return d.format(OUTPUT_DATE);
     }
 
@@ -67,9 +70,11 @@ public class DateTimeUtil {
      * @return Formatted date-time string.
      */
     public static String formatDateTime(LocalDateTime dt) {
-        String s = dt.format(OUTPUT_DATE_TIME); // e.g. "Dec 2 2019, 6:00PM"
+        assert dt != null : "Date-time must not be null";
+        String s = dt.format(OUTPUT_DATE_TIME);
+        assert s.length() >= 2 : "Formatted date-time string unexpectedly short";
         return s.substring(0, s.length() - 2)
-                + s.substring(s.length() - 2).toLowerCase(Locale.ENGLISH); // -> "pm"
+                + s.substring(s.length() - 2).toLowerCase(Locale.ENGLISH);
     }
 
 }

@@ -19,9 +19,12 @@ public class Event extends Task {
      */
     public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
+        assert from != null : "Event 'from' must not be null";
+        assert to != null : "Event 'to' must not be null";
         this.from = from;
         this.to = to;
     }
+
 
     /**
      * Returns the start date-time of this event.

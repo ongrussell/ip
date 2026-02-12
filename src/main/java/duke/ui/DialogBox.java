@@ -1,11 +1,9 @@
 package duke.ui;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

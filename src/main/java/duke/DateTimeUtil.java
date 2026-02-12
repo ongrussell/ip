@@ -3,6 +3,7 @@ package duke;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * Utility methods and formatters for parsing and formatting dates and times used by the application.
@@ -66,6 +67,9 @@ public class DateTimeUtil {
      * @return Formatted date-time string.
      */
     public static String formatDateTime(LocalDateTime dt) {
-        return dt.format(OUTPUT_DATE_TIME);
+        String s = dt.format(OUTPUT_DATE_TIME); // e.g. "Dec 2 2019, 6:00PM"
+        return s.substring(0, s.length() - 2)
+                + s.substring(s.length() - 2).toLowerCase(Locale.ENGLISH); // -> "pm"
     }
+
 }

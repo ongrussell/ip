@@ -33,7 +33,7 @@ public class MainWindow extends AnchorPane {
     private Suu suu;
 
     private final Image userImage = loadImage("/images/DaUser.png");
-    private final Image suuImage = loadImage("/images/DaDuke.png");
+    private final Image suuImage = loadImage("/images/DaSuu.png");
 
     /**
      * Initialises the UI components after the FXML is loaded.

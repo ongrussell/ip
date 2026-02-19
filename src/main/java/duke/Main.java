@@ -20,6 +20,7 @@ public class Main extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             stage.setScene(scene);
+            stage.setTitle("Suu");
 
             MainWindow controller = fxmlLoader.getController();
             controller.setSuu(suu);
